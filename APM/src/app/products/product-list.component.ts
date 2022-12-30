@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { catchError, EMPTY, Observable, of } from 'rxjs';
 
 import { ProductCategory } from '../product-categories/product-category';
@@ -11,12 +11,12 @@ import { ProductService } from './product.service';
   styleUrls: ['./product-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush //changes detection startegy is set as part of the componenet decortor
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent {
   pageTitle = 'Product List';
   errorMessage = '';
   categories: ProductCategory[] = [];
 
-  products$: Observable<Product[]> | undefined;
+  // products$: Observable<Product[]> | undefined;
   //async pipe benefits
   // - no need to subscribe
   // - no need to unsubscribe
@@ -24,15 +24,13 @@ export class ProductListComponent implements OnInit {
 
   constructor(private productService: ProductService) { }
 
-  ngOnInit(): void {
-    this.products$ = this.productService.getProducts()
+  products$ = this.productService.products$
     .pipe(
       catchError(err => {
         this.errorMessage = err;
         return EMPTY; // or return of([])
       })
     );
-  }
 
   onAdd(): void {
     console.log('Not yet implemented');
