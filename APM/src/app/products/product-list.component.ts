@@ -16,6 +16,10 @@ export class ProductListComponent implements OnInit {
   categories: ProductCategory[] = [];
 
   products$: Observable<Product[]> | undefined;
+  //async pipe benefits
+  // - no need to subscribe
+  // - no need to unsubscribe
+  // - imporves change detection
 
   constructor(private productService: ProductService) { }
 
