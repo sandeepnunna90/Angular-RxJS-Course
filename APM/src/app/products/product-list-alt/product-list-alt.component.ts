@@ -28,6 +28,6 @@ export class ProductListAltComponent {
     );
 
   onSelected(productId: number): void {
-    console.log('Not yet implemented');
+    this.productService.selectedProductChanged(productId)
   }
 }
