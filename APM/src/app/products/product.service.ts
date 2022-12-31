@@ -50,6 +50,15 @@ export class ProductService {
     shareReplay(1)
   );
 
+  selectedProductSuppliers$ = combineLatest([
+    this.selectedProduct$,
+    this.supplierService.suppliers$
+  ]).pipe(
+    map(([selectedProduct, suppliers]) =>
+      suppliers.filter(supplier => selectedProduct?.supplierIds?.includes(supplier.id))
+    )
+  );
+
   // 3 Steps to reacting to Actions
   // - Create an Action Stream subject/behavior subject
   // - Combine Action Stream with Data Stream (use the combined stream in the component)
