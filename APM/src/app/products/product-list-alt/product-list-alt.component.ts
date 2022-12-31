@@ -27,6 +27,8 @@ export class ProductListAltComponent {
       })
     );
 
+  selectedProduct$ = this.productService.selectedProduct$;
+
   onSelected(productId: number): void {
     this.productService.selectedProductChanged(productId)
   }
