@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { catchError, EMPTY, Subject } from 'rxjs';
+import { catchError, EMPTY, map, Subject } from 'rxjs';
 import { Supplier } from 'src/app/suppliers/supplier';
 import { Product } from '../product';
 
@@ -11,8 +11,6 @@ import { ProductService } from '../product.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductDetailComponent {
-  pageTitle = 'Product Detail';
-
   private errorMessageSubject = new Subject<string>();
   errorMessage$ = this.errorMessageSubject.asObservable();
 
@@ -22,6 +20,11 @@ export class ProductDetailComponent {
         this.errorMessageSubject.next(err);
         return EMPTY;
       })
+    );
+
+  pageTitle$ = this.product$
+    .pipe(
+      map(p => p ? `Product Detail for: ${p.productName}` : null)
     );
 
   productSuppliers$ = this.productService.selectedProductSuppliers$
