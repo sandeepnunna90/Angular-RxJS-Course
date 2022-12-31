@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { catchError, EMPTY, map, Observable, of } from 'rxjs';
 
 import { ProductCategory } from '../product-categories/product-category';
+import { ProductCategoryService } from '../product-categories/product-category.service';
 
 import { Product } from './product';
 import { ProductService } from './product.service';
@@ -31,6 +32,14 @@ export class ProductListComponent {
       })
     );
 
+  categories$ = this.productCategoryService.productCategories$
+      .pipe(
+        catchError(err => {
+          this.errorMessage = err;
+          return EMPTY;
+        })
+      );
+
   productsSimpleFilter$ = this.productService.productsWithCategory$
     .pipe(
       map(products =>
@@ -40,7 +49,10 @@ export class ProductListComponent {
       )
     )
 
-  constructor(private productService: ProductService) { }
+  constructor(
+    private productService: ProductService,
+    private productCategoryService: ProductCategoryService
+  ) {}
 
 
   onAdd(): void {
@@ -48,6 +60,6 @@ export class ProductListComponent {
   }
 
   onSelected(categoryId: string): void {
-    console.log('Not yet implemented');
+    this.selectedCategoryId = +categoryId;
   }
 }
