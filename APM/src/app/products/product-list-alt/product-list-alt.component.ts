@@ -19,7 +19,7 @@ export class ProductListAltComponent {
 
   constructor(private productService: ProductService) { }
 
-  products$ = this.productService.products$
+  products$ = this.productService.productsWithCategory$
     .pipe(
       catchError(err => {
         this.errorMessage = err;
