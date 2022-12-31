@@ -37,13 +37,6 @@ export class ProductService {
   private productSelectedSubject = new BehaviorSubject<number>(0);
   productSelectedAction$ = this.productSelectedSubject.asObservable();
 
-  // reminder all rxjs operators inside pipe have an input observable and emit an output observable
-  // selectedProduct$ = this.productsWithCategory$
-  //   .pipe(
-  //     map(products => products.find(product => product.id === 5)),
-  //     tap(product => console.log('selectedProduct', product))
-  //   );
-
   selectedProduct$ = combineLatest([
     this.productsWithCategory$,
     this.productSelectedAction$
@@ -53,6 +46,14 @@ export class ProductService {
     ),
     tap(product => console.log('selectedProduct', product))
   );
+
+
+  // reminder all rxjs operators inside pipe have an input observable and emit an output observable
+  // selectedProduct$ = this.productsWithCategory$
+  //   .pipe(
+  //     map(products => products.find(product => product.id === 5)),
+  //     tap(product => console.log('selectedProduct', product))
+  //   );
 
   constructor(
     private http: HttpClient,
