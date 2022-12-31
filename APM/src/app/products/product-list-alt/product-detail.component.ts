@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { catchError, EMPTY, map, Subject } from 'rxjs';
+import { catchError, combineLatest, EMPTY, filter, map, Subject } from 'rxjs';
 import { Supplier } from 'src/app/suppliers/supplier';
 import { Product } from '../product';
 
@@ -34,6 +34,18 @@ export class ProductDetailComponent {
         return EMPTY;
       })
     );
+
+  vm$ = combineLatest([
+    this.product$,
+    this.productSuppliers$,
+    this.pageTitle$
+  ]).pipe(
+      filter(([product]) => Boolean(product)), //([product]) - array destructuring with only the product array
+      map(([product, productSuppliers, pageTitle]) => //([product, productSuppliers, pageTitle]) - array destructuring with all 3 arrays
+        ({ product, productSuppliers, pageTitle })) //object Literal { a: a, b: b } can be changed to {a, b}
+    );
+
+
   constructor(private productService: ProductService) { }
 
 }
