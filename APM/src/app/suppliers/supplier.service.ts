@@ -34,9 +34,9 @@ export class SupplierService {
   )
 
   constructor(private http: HttpClient) {
-    this.suppliersWithConcatMap$.subscribe(item => console.log('concatMap result:', item));
-    this.suppliersWithMergeMap$.subscribe(item => console.log('mergeMap result:', item));
-    this.suppliersWithSwitchMap$.subscribe(item => console.log('switchMap result:', item));
+    // this.suppliersWithConcatMap$.subscribe(item => console.log('concatMap result:', item));
+    // this.suppliersWithMergeMap$.subscribe(item => console.log('mergeMap result:', item));
+    // this.suppliersWithSwitchMap$.subscribe(item => console.log('switchMap result:', item));
     // this.suppliersWithMap$.subscribe(o => o.subscribe(
     //   item => console.log('map result:', item)
     // ));
