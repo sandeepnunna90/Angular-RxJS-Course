@@ -27,7 +27,7 @@ export class ProductListComponent {
 
 
   products$ = combineLatest([
-    this.productService.productsWithCategory$, // Data stream -> emits array products
+    this.productService.productsWithAdd$, // Data stream -> emits array products
     this.categorySelectedAction$ // Action stream -> emits value of selectedCategoryId everytime user selects it.
     //  .pipe(
     //   startWith(0) // Need this as data is not displayed directly on page load
@@ -60,7 +60,7 @@ export class ProductListComponent {
 
 
   onAdd(): void {
-    console.log('Not yet implemented');
+    this.productService.addProduct();
   }
 
   onSelected(categoryId: string): void {

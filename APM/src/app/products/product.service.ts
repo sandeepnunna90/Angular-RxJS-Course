@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
-import { BehaviorSubject, catchError, combineLatest, map, Observable, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, map, merge, Observable, scan, Subject, tap, throwError } from 'rxjs';
 
 import { Product } from './product';
 import { ProductCategoryService } from '../product-categories/product-category.service';
@@ -47,6 +47,22 @@ export class ProductService {
     tap(product => console.log('selectedProduct', product))
   );
 
+  // 3 Steps to reacting to Actions
+  // - Create an Action Stream subject/behavior subject
+  // - Combine Action Stream with Data Stream (use the combined stream in the component)
+  // - Emit a value to the action stream everytime an action occurs.
+
+  productInsertedSubject = new Subject<Product>();
+  productInsertedAction$ = this.productInsertedSubject.asObservable();
+
+  productsWithAdd$ = merge(
+    this.productsWithCategory$,
+    this.productInsertedAction$
+  ).pipe(
+    scan((acc, value) =>
+       (value instanceof Array) ? [...value] : [...acc, value], [] as Product[]
+    )
+  )
 
   // reminder all rxjs operators inside pipe have an input observable and emit an output observable
   // selectedProduct$ = this.productsWithCategory$
@@ -60,6 +76,11 @@ export class ProductService {
     private productCategoryService: ProductCategoryService
   ) { }
 
+  addProduct(newProduct?: Product) {
+    newProduct = newProduct || this.fakeProduct();
+    this.productInsertedSubject.next(newProduct); // emits value to action stream
+  }
+
   selectedProductChanged(selectedProductId: number): void {
     this.productSelectedSubject.next(selectedProductId);
   }
@@ -72,7 +93,7 @@ export class ProductService {
       description: 'Our new product',
       price: 8.9,
       categoryId: 3,
-      // category: 'Toolbox',
+      category: 'Toolbox',
       quantityInStock: 30
     };
   }
