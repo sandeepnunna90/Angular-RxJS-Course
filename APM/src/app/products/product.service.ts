@@ -33,6 +33,13 @@ export class ProductService {
     )
   );
 
+  // reminder all rxjs operators inside pipe have an input observable and emit an output observable
+  selectedProduct$ = this.productsWithCategory$
+    .pipe(
+      map(products => products.find(product => product.id === 5)),
+      tap(product => console.log('selectedProduct', product))
+    );
+
   constructor(
     private http: HttpClient,
     private productCategoryService: ProductCategoryService
